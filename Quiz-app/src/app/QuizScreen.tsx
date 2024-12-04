@@ -1,22 +1,32 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  PressableProps,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { QuestionCard } from "./components/QuestionCard";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import questions from "../questions";
 import { Card } from "./components/Card";
 import { CustomButton } from "./components/CustomButton";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useQuizContext } from "../providers/QuizProvider";
+import { useTimer } from "../hooks/use-timer";
+import LottieView from "lottie-react-native";
 
 const QuizScreen = () => {
-  const { question, questionIndex, onNext, score, totalQuestions } =
+  const { question, questionIndex, onNext, score, totalQuestions, bestScore } =
     useQuizContext();
+
+  const { time, startTimer, clearTimer } = useTimer(50);
+
+  useEffect(() => {
+    // startTimer();
+
+    return () => {
+      clearTimer();
+    };
+  }, [question]);
+
+  useEffect(() => {
+    if (time <= 0) {
+      onNext();
+    }
+  }, [time]);
 
   return (
     <SafeAreaView style={styles.page}>
@@ -29,16 +39,24 @@ const QuizScreen = () => {
         {question ? (
           <View>
             <QuestionCard question={question} />
-            <Text style={styles.time}>20 Sec</Text>
+            <Text style={styles.time}>{time} Sec</Text>
           </View>
         ) : (
-          <Card title="Well done">
-            <Text>Greate Start</Text>
-            <Text>
-              You have done corrected answers {score}/{totalQuestions}
-            </Text>
-            <Text>Best Score is 10</Text>
-          </Card>
+          <>
+            <LottieView
+              style={StyleSheet.absoluteFill}
+              autoPlay
+              loop={false}
+              source={require("../../assets/Animation - 1733314583154.json")}
+            />
+            <Card title="Well done">
+              <Text>Greate Start</Text>
+              <Text>
+                You have done corrected answers {score}/{totalQuestions}
+              </Text>
+              <Text>Best Score is {bestScore}</Text>
+            </Card>
+          </>
         )}
         {/* Footer */}
         <CustomButton
@@ -59,7 +77,7 @@ export default QuizScreen;
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    backgroundColor: "#fdfef4",
+    backgroundColor: "#fffff7",
   },
   container: {
     flex: 1,
@@ -68,12 +86,12 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    color: "#005055",
+    color: "#005057",
   },
   time: {
     textAlign: "center",
     marginTop: 10,
-    color: "#005055",
+    color: "#005057",
     fontWeight: "bold",
   },
 });

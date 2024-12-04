@@ -10,14 +10,16 @@ export const AnswerOption = ({ option }: AnswerOptionProps) => {
   const { selectedOption, setSelectedOption } = useQuizContext();
 
   const isSelected = option === selectedOption;
+  console.log("AnswerOption render");
+
   return (
     <Pressable
       onPress={() => setSelectedOption(option)}
       style={[
         styles.container,
         isSelected && {
-          backgroundColor: "yellow",
-          borderColor: "yellow",
+          backgroundColor: "#ffff34",
+          borderColor: "#ffff32",
         },
       ]}
     >
