@@ -32,9 +32,10 @@ export const QuestionCard = ({ question }: QuestionCard) => {
 
   return (
     <Card title={question.title}>
-      <Text style={{ fontSize: 40 }} onPress={() => setCounter((c) => c + 1)}>
-        {counter}
-      </Text>
+      <Text
+        style={{ fontSize: 40 }}
+        onPress={() => setCounter((c) => c + 1)}
+      ></Text>
       <View style={{ gap: 10 }}>
         {question.options.map((option) => (
           <AnswerOption key={option} option={option} />
