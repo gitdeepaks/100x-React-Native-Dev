@@ -1,6 +1,5 @@
 import { WorkoutWithExercises } from "@/types/models";
 import { create } from "zustand";
-import * as Crypto from "expo-crypto";
 import { newWorkOut, finishWorkOut } from "@/services/workoutService";
 interface State {
   currentWorkout: WorkoutWithExercises | null;
