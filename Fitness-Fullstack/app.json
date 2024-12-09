@@ -1,14 +1,15 @@
 {
   "expo": {
-    "name": "Fitness",
-    "slug": "Fitness",
-    "scheme": "notJustFit",
+    "name": "Fitness-Fullstack",
+    "slug": "Fitness-Fullstack",
+    "scheme": "fitness-app-scheme",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
