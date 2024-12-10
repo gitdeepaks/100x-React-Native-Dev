@@ -1,11 +1,12 @@
-import { View, Text, TextInput } from '@/components/general/Themed';
-import { ExerciseSet } from '@/types/models';
-import { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { View, Text, TextInput } from "@/components/general/Themed";
+import { ExerciseSet } from "@/types/models";
+import { useState } from "react";
+import { StyleSheet } from "react-native";
 // TODO: In newer version of GH, import the Reanimated version
 // import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-import CustomButton from '../general/CustomButton';
+import Swipeable from "react-native-gesture-handler/Swipeable";
+import CustomButton from "../general/CustomButton";
+import { useWorkout } from "@/hooks";
 
 type SetItem = {
   index: number;
@@ -13,23 +14,29 @@ type SetItem = {
 };
 
 export default function SetItem({ index, set }: SetItem) {
-  const [weight, setWeight] = useState(set.weight?.toString() || '');
-  const [reps, setReps] = useState(set.reps?.toString() || '');
+  const [weight, setWeight] = useState(set.weight?.toString() || "");
+  const [reps, setReps] = useState(set.reps?.toString() || "");
+
+  const updateSet = useWorkout((s) => s.updateSets);
+
+  const deleteSetItem = useWorkout((s) => s.deleteSet);
 
   const handleWeightChange = () => {
-    console.warn('Weight changed to: ', weight);
+    console.warn("Weight changed to: ", weight);
+    updateSet(set.id, { weight: parseFloat(weight) });
   };
 
   const handleRepsChange = () => {
-    console.warn('Reps changed to: ', reps);
+    console.warn("Reps changed to: ", reps);
+    updateSet(set.id, { reps: parseInt(reps) });
   };
 
   const renderRightActions = () => (
     <CustomButton
-      onPress={() => console.warn('Deleting set: ', set.id)}
+      onPress={() => deleteSetItem(set.id)}
       title="Delete"
       type="link"
-      style={{ width: 'auto', padding: 5 }}
+      style={{ width: "auto", padding: 5 }}
       color="crimson"
     />
   );
@@ -62,13 +69,13 @@ export default function SetItem({ index, set }: SetItem) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 5,
-    alignItems: 'center',
+    alignItems: "center",
   },
   setNumber: {
-    marginRight: 'auto',
-    fontWeight: 'bold',
+    marginRight: "auto",
+    fontWeight: "bold",
     fontSize: 16,
   },
   input: {
@@ -76,6 +83,6 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingVertical: 7,
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

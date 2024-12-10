@@ -1,6 +1,11 @@
 import { Workout, WorkoutWithExercises } from "@/types/models";
-import { getExerciseTotalWeight } from "@/services/exerciseService";
+import {
+  cleanExercise,
+  getExerciseTotalWeight,
+} from "@/services/exerciseService";
 import * as Crypto from "expo-crypto";
+import exercises from "@/data/exercises";
+import { saveWorkout } from "@/db/workouts";
 
 export const getWorkoutTotalWeight = (workout: WorkoutWithExercises) => {
   return workout.exercises.reduce(
@@ -9,7 +14,7 @@ export const getWorkoutTotalWeight = (workout: WorkoutWithExercises) => {
   );
 };
 
-export const newWorkOut = () => {
+export const newWorkOut = async () => {
   const newWorkOut: WorkoutWithExercises = {
     id: Crypto.randomUUID(),
     createdAt: new Date(),
@@ -17,14 +22,30 @@ export const newWorkOut = () => {
     exercises: [],
   };
 
+  // save to DB
+  await saveWorkout(newWorkOut);
   return newWorkOut;
 };
 
-export const finishWorkOut = (workout: WorkoutWithExercises) => {
+export const finishWorkout = (workout: WorkoutWithExercises) => {
+  // cleanup incomplete sets
+  const cleanedWorkout = cleanupWorkout(workout);
+
   const finishedWorkout: WorkoutWithExercises = {
-    ...workout,
+    ...cleanedWorkout,
     finishedAt: new Date(),
   };
 
   return finishedWorkout;
+};
+
+export const cleanupWorkout = (workout: WorkoutWithExercises) => {
+  const cleanedExercises = workout.exercises
+    .map(cleanExercise)
+    .filter((e) => e !== null);
+
+  return {
+    ...workout,
+    exercises: cleanedExercises,
+  };
 };

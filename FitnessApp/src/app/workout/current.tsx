@@ -12,6 +12,7 @@ import { useWorkout } from "@/hooks";
 export default function CurrentWorkoutScreen() {
   const currentWorkout = useWorkout((s) => s.currentWorkout);
   const finishWorkOut = useWorkout((s) => s.finishWorkOut);
+  const addExercise = useWorkout((s) => s.addExercise);
   const headerHeight = useHeaderHeight();
 
   if (!currentWorkout) {
@@ -37,15 +38,13 @@ export default function CurrentWorkoutScreen() {
         keyboardVerticalOffset={headerHeight}
       >
         <FlatList
-          data={[1, 2, 3]}
+          data={currentWorkout.exercises}
           contentContainerStyle={{ gap: 10, padding: 10 }}
-          renderItem={() => <WorkoutExerciseItem />}
+          renderItem={({ item }) => <WorkoutExerciseItem exercise={item} />}
           ListHeaderComponent={<WorkoutHeader />}
           ListFooterComponent={
             <SelectExerciseModal
-              onSelectExercise={(name) =>
-                console.warn("Exercise seleted: ", name)
-              }
+              onSelectExercise={(name) => addExercise(name)}
             />
           }
         />
