@@ -1,66 +1,42 @@
-import { boardHeight } from "@/constansts";
-import { SafeAreaView, View, StyleSheet, Button } from "react-native";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withSpring,
-  withDecay,
-  Easing,
-  withSequence,
-  withRepeat,
-  withDelay,
-} from "react-native-reanimated";
+import { ballRadius, boardHeight } from "@/constansts";
+import {
+  SafeAreaView,
+  View,
+  StyleSheet,
+  Button,
+  useWindowDimensions,
+} from "react-native";
+import { useSharedValue } from "react-native-reanimated";
+
+import { BallData } from "@/types";
+
+import Ball from "./Ball";
+import { GameContext } from "@/GameContext";
 
 export default function Game() {
-  const x = useSharedValue(1);
-  const moveBall = () => {
-    // x.value = withTiming(x.value + 100, {
-    //   duration: 1000,
-    //   easing: Easing.linear,
-    // });
+  const { width } = useWindowDimensions();
 
-    x.value = withRepeat(
-      withDelay(
-        1000,
-        withSequence(
-          withTiming(230),
-          withTiming(170),
-          withTiming(200, {}, () => {})
-        )
-      ),
-      -1
-    );
-  };
-
-  const ballStyles = useAnimatedStyle(() => {
-    return {
-      left: x.value,
-    };
+  const ball = useSharedValue<BallData>({
+    x: width / 2,
+    y: boardHeight - ballRadius,
+    r: ballRadius,
+    dx: -1,
+    dy: -1,
   });
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.board}>
-        {/* TODO: Add game elements */}
+  const isUserTurn = useSharedValue(true);
 
-        <Animated.View
-          style={[
-            {
-              width: 50,
-              height: 50,
-              backgroundColor: "white",
-              borderRadius: 50,
-              position: "absolute",
-              top: boardHeight / 2,
-              left: x,
-            },
-            ballStyles,
-          ]}
-        />
-      </View>
-      <Button title="Move" onPress={moveBall} />
-    </SafeAreaView>
+  return (
+    <GameContext.Provider value={{ ball, isUserTurn }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.board}>
+          {/* TODO: Add game elements */}
+
+          <Ball />
+        </View>
+        <Button title="Move" onPress={() => (isUserTurn.value = false)} />
+      </SafeAreaView>
+    </GameContext.Provider>
   );
   ``;
 }
