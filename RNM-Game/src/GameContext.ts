@@ -5,6 +5,9 @@ import { BallData } from "./types";
 export const GameContext = createContext<{
   ball?: SharedValue<BallData>;
   isUserTurn?: SharedValue<boolean>;
-}>({});
+  onEndTurn: () => void;
+}>({
+  onEndTurn: () => {},
+});
 
 export const useGameContext = () => useContext(GameContext);

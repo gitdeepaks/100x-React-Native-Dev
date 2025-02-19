@@ -10,7 +10,7 @@ import { ballSpeed, boardHeight } from "@/constansts";
 import { useGameContext } from "@/GameContext";
 
 export default function Ball() {
-  const { ball, isUserTurn } = useGameContext();
+  const { ball, isUserTurn, onEndTurn } = useGameContext();
   const { width } = useWindowDimensions();
   const frameCallback = useFrameCallback((frameInfo) => {
     // console.log(frameInfo);
@@ -41,6 +41,7 @@ export default function Ball() {
       // console.log("bottom collision");
       dy *= -1;
       y = boardHeight - r;
+      onEndTurn();
     }
 
     ball!.value = { ...ball!.value, x, y, dx, dy };
@@ -51,7 +52,7 @@ export default function Ball() {
   };
 
   useAnimatedReaction(
-    () => isUserTurn?.value,
+    () => isUserTurn!.value,
     (val) => runOnJS(startFrameCallback)(!val)
   );
 
@@ -65,8 +66,7 @@ export default function Ball() {
       aspectRatio: 1,
       backgroundColor: "blue",
       borderRadius: r,
-
-      position: "absolute",
+      position: "absolute" as const,
     };
   });
   return <Animated.View style={ballStyles} />;
