@@ -5,22 +5,27 @@ import {
   StyleSheet,
   Button,
   useWindowDimensions,
+  Text,
+  Alert,
 } from "react-native";
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
 
-import { BallData, BlockData } from "@/types";
+import { BallData } from "@/types";
 
 import Ball from "./Ball";
 import { GameContext } from "@/GameContext";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Block from "./Block";
 import { generateBlocksRow } from "@/utils";
+import { useState } from "react";
 
 export default function Game() {
   const { width } = useWindowDimensions();
+  const [score, setScore] = useState(1);
 
   const ball = useSharedValue<BallData>({
     x: width / 2,
@@ -38,12 +43,57 @@ export default function Game() {
 
   const isUserTurn = useSharedValue(true);
 
+  const incrementScore = () => {
+    setScore((s) => s + 1);
+  };
+
+  const onGameOver = () => {
+    Alert.alert("Game Over", "Score: " + score, [
+      {
+        text: "Restart",
+        onPress: () => {
+          blocks.value = [];
+
+          blocks.value = Array(3)
+            .fill(0)
+            .flatMap((_, row) => generateBlocksRow(row + 1));
+
+          setScore(1);
+        },
+      },
+    ]);
+  };
+
   const onEndTurn = () => {
     "worklet";
     if (isUserTurn.value) {
       return;
     }
     isUserTurn.value = true;
+
+    const gameOver = blocks.value.some(
+      (block) => block.val > 0 && block.y + (block.w + 10) * 2 > boardHeight
+    );
+
+    if (gameOver) {
+      console.log("game over");
+      runOnJS(onGameOver)();
+      return;
+    }
+
+    blocks.modify((blocks) => {
+      // move blocks down
+      blocks.forEach((block) => {
+        block.y = block.y + blockW + 10;
+      });
+
+      // add new blocks on top row
+      blocks.push(...generateBlocksRow(1));
+
+      return blocks;
+    });
+
+    runOnJS(incrementScore)();
   };
 
   const pan = Gesture.Pan()
@@ -85,6 +135,16 @@ export default function Game() {
     <GameContext.Provider value={{ ball, isUserTurn, onEndTurn, blocks }}>
       <GestureDetector gesture={pan}>
         <SafeAreaView style={styles.container}>
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 40, fontWeight: "bold" }}>
+              Score: {score}
+            </Text>
+          </View>
           <View style={styles.board}>
             {/* TODO: Add game elements */}
 
