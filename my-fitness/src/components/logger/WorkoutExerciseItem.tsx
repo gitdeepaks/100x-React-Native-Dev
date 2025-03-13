@@ -11,25 +11,13 @@ export const WorkoutExerciseItem = () => {
       id: "1",
       weight: 20,
       reps: 10,
-      exerciseId: "",
+      exerciseId: "e1",
     },
     {
       id: "2",
-      weight: 20,
-      reps: 10,
-      exerciseId: "",
-    },
-    {
-      id: "3",
-      weight: 20,
-      reps: 10,
-      exerciseId: "",
-    },
-    {
-      id: "4",
-      weight: 20,
-      reps: 10,
-      exerciseId: "",
+      weight: 50,
+      reps: 5,
+      exerciseId: "e1",
     },
   ];
   return (
@@ -45,8 +33,8 @@ export const WorkoutExerciseItem = () => {
           gap: 5,
         }}
       >
-        {[1, 2, 3].map((item, index) => (
-          <SetItems index={index} />
+        {sets.map((item, index) => (
+          <SetItems key={item.id} index={index} set={item} />
         ))}
       </View>
     </Card>

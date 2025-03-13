@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "@/components/general/Themed";
+import { View, Text, TextInput } from "@/components/general/Themed";
 import { ExerciseSet } from "@/types/models";
 
 type SetItems = {
@@ -11,6 +11,7 @@ export default function SetItems({ index, set }: SetItems) {
   return (
     <View>
       <Text>{index + 1}</Text>
+      <TextInput placeholder="50" />
     </View>
   );
 }
