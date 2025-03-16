@@ -2,6 +2,8 @@ import React from "react";
 import { View, Text, TextInput } from "@/components/general/Themed";
 import { ExerciseSet } from "@/types/models";
 import { StyleSheet } from "react-native";
+import Swipeable from "react-native-gesture-handler/Swipeable";
+import CustomButton from "../general/CustomButton";
 
 type SetItems = {
   index: number;
@@ -20,26 +22,41 @@ export default function SetItems({ index, set }: SetItems) {
     console.warn("handle reps change", reps);
   };
 
+  const renderRightActions = () => (
+    <CustomButton
+      onPress={() => console.warn("delete set", set.id)}
+      title="Delete"
+      type="link"
+      style={{
+        width: "auto",
+        padding: 5,
+      }}
+      color="crimson"
+    />
+  );
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.setNumber}>{index + 1}</Text>
-      <TextInput
-        placeholder="50"
-        value={weight}
-        onChangeText={setWeight}
-        style={styles.input}
-        keyboardType="numeric"
-        onBlur={hanldeWeightChange}
-      />
-      <TextInput
-        placeholder="8"
-        value={reps}
-        onChangeText={setReps}
-        style={styles.input}
-        keyboardType="numeric"
-        onBlur={handleRepsChange}
-      />
-    </View>
+    <Swipeable renderRightActions={renderRightActions}>
+      <View style={styles.container}>
+        <Text style={styles.setNumber}>{index + 1}</Text>
+        <TextInput
+          placeholder="50"
+          value={weight}
+          onChangeText={setWeight}
+          style={styles.input}
+          keyboardType="numeric"
+          onBlur={hanldeWeightChange}
+        />
+        <TextInput
+          placeholder="8"
+          value={reps}
+          onChangeText={setReps}
+          style={styles.input}
+          keyboardType="numeric"
+          onBlur={handleRepsChange}
+        />
+      </View>
+    </Swipeable>
   );
 }
 

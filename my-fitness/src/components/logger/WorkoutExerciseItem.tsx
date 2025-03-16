@@ -4,6 +4,7 @@ import { View, Text } from "@/components/general/Themed";
 import { StyleSheet } from "react-native";
 import SetItems from "./SetItems";
 import { ExerciseSet } from "@/types/models";
+import CustomButton from "../general/CustomButton";
 
 export const WorkoutExerciseItem = () => {
   const sets: ExerciseSet[] = [
@@ -37,6 +38,15 @@ export const WorkoutExerciseItem = () => {
           <SetItems key={item.id} index={index} set={item} />
         ))}
       </View>
+      <CustomButton
+        title="+ Add Set"
+        type="link"
+        onPress={() => console.warn("add set")}
+        style={{
+          width: "100%",
+          marginTop: 10,
+        }}
+      />
     </Card>
   );
 };
