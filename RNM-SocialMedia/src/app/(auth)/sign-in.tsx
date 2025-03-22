@@ -1,14 +1,15 @@
-import { useAuth } from "@/providers/AuthProvider";
 import { useState } from "react";
 import { View, Text, TextInput, Button } from "react-native";
+import { useAuth } from "@/providers/AuthProvider";
 
 export default function SignIn() {
-  const { signIn } = useAuth();
   const [username, setUsername] = useState("");
+  const { signIn } = useAuth();
 
   const handleSignIn = () => {
     if (!username) return;
     signIn(username);
+    console.log(username);
   };
   return (
     <View className="flex-1 bg-white items-center justify-center w-full max-w-md mx-auto">

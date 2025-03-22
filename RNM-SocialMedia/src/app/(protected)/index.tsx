@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, Text, View, FlatList, Button } from "react-native";
 import FeedPostItem from "@/components/FeedPostItem";
 import dummyPosts from "@/dummyPosts";
 import { Link } from "expo-router";
+import { useAuth } from "@/providers/AuthProvider";
 
 export default function App() {
+  const { signOut } = useAuth();
   return (
     <FlatList
       data={dummyPosts}
@@ -12,6 +14,7 @@ export default function App() {
           <FeedPostItem post={item} />
         </Link>
       )}
+      ListFooterComponent={() => <Button onPress={signOut} title="Sign Out" />}
     />
   );
 }
