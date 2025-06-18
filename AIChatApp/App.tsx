@@ -1,20 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import './global.css';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Hello AI-Chat App</Text>
+    <View className="flex-1 items-center justify-center bg-white">
+      <Text className="text-blue-500 text-3xl font-bold">
+        Hello AI-Chat App
+      </Text>
       <StatusBar style="auto" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
